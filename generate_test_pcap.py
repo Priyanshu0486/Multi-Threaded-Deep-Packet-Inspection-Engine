@@ -135,7 +135,6 @@ def create_dns_query(domain):
     question += struct.pack('>HH', 1, 1)  # Type A, Class IN
     
     return txid + flags + counts + question
-//
 
 def main():
     writer = PCAPWriter('test_dpi.pcap')
