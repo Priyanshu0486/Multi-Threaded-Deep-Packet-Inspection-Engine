@@ -19,6 +19,7 @@ public final class ConsoleReport {
         System.out.printf("Active Flows  : %d%n", flowCount);
         printApps(stats);
         printDomains(stats);
+        printDroppedPackets(stats);
     }
 
     public static void printMultiThreadReport(
@@ -44,6 +45,7 @@ public final class ConsoleReport {
         }
         printApps(stats);
         printDomains(stats);
+        printDroppedPackets(stats);
     }
 
     private static void printApps(StatsCollector stats) {
@@ -71,5 +73,21 @@ public final class ConsoleReport {
         stats.detectedDomains().entrySet().stream()
             .sorted(Map.Entry.comparingByKey())
             .forEach(entry -> System.out.println(" - " + entry.getKey() + " -> " + entry.getValue().displayName()));
+    }
+
+    private static void printDroppedPackets(StatsCollector stats) {
+        if (stats.getDroppedPackets().isEmpty()) {
+            return;
+        }
+        System.out.println();
+        System.out.println("Dropped Packets");
+        for (DroppedPacketInfo info : stats.getDroppedPackets()) {
+            String proto = info.protocol() == 6 ? "TCP" : info.protocol() == 17 ? "UDP" : "Other";
+            System.out.printf(" - %s:%d -> %s:%d [%s] %s %s%n",
+                info.srcIp(), info.srcPort(), info.dstIp(), info.dstPort(), proto,
+                info.appType().displayName(),
+                (info.sni() != null && !info.sni().isEmpty()) ? "(" + info.sni() + ")" : ""
+            );
+        }
     }
 }

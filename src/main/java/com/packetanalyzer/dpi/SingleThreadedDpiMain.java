@@ -67,7 +67,7 @@ public final class SingleThreadedDpiMain {
 
                 stats.recordClassification(flow.appType(), flow.sni());
                 if (flow.blocked()) {
-                    stats.recordDropped();
+                    stats.recordDropped(packet, flow.appType(), flow.sni());
                 } else {
                     stats.recordForwarded();
                     writer.writePacket(rawPacket);

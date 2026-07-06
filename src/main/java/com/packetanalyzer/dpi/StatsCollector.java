@@ -1,7 +1,9 @@
 package com.packetanalyzer.dpi;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 public final class StatsCollector {
@@ -13,6 +15,7 @@ public final class StatsCollector {
     private final AtomicLong udpPackets = new AtomicLong();
     private final Map<AppType, AtomicLong> appCounts = new ConcurrentHashMap<>();
     private final Map<String, AppType> detectedDomains = new ConcurrentHashMap<>();
+    private final List<DroppedPacketInfo> droppedPackets = new CopyOnWriteArrayList<>();
 
     public void recordIngress(ParsedPacket packet) {
         totalPackets.incrementAndGet();
@@ -35,8 +38,15 @@ public final class StatsCollector {
         forwarded.incrementAndGet();
     }
 
-    public void recordDropped() {
+    public void recordDropped(ParsedPacket packet, AppType appType, String sni) {
         dropped.incrementAndGet();
+        droppedPackets.add(new DroppedPacketInfo(
+            packet.srcIp(), packet.dstIp(), packet.srcPort(), packet.dstPort(), packet.protocol(), appType, sni
+        ));
+    }
+
+    public List<DroppedPacketInfo> getDroppedPackets() {
+        return droppedPackets;
     }
 
     public long totalPackets() {
