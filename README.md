@@ -6,6 +6,17 @@ It includes:
 
 - a single-threaded mode for learning, debugging, and step-by-step understanding
 - a multi-threaded mode that uses load balancers and fast-path workers for higher throughput
+- a modern **Next.js Glassmorphism Web Dashboard** to visually interact with the engine
+
+## 🚀 Live Demo (For Recruiters & Interviewers)
+
+This project includes a full-stack Web UI to make testing the DPI engine completely frictionless.
+
+**How to test the engine:**
+1. **Download the Sample PCAP:** Click the "Download Sample PCAP" button on the dashboard to get the provided `test_dpi.pcap` file.
+2. **Configure Blocking:** Drag and drop the PCAP into the upload area. Set a blocking rule (for example, select "Block by Domain" and type `youtube.com`).
+3. **Run Analysis:** Hit "Analyze Traffic". The dashboard will execute the Java engine in the background and visually map the output.
+4. **View Results:** You'll see real-time statistics including TCP/UDP counts, application breakdowns (YouTube, Google, etc.), how the packets were distributed across worker threads, and a detailed log of exact packets dropped by the engine.
 
 ## What Is DPI?
 
